@@ -16,6 +16,7 @@ class App extends Component {
 
   handleProdSelect(event) {
     let newProduct = SHINGLES.find(function (e) { return e.uid === event.target.value });
+
     this.setState({
       product: event.target.value,
       color: newProduct.shingle_colors[0].name,
@@ -27,6 +28,7 @@ class App extends Component {
     const colors = prod.shingle_colors;
     const currentColor = colors.find(function (e) { return e.name === this.state.color }, this);
     const color_index = colors.indexOf(currentColor);
+
     this.setState({
       product: this.state.product,
       color: colors[(color_index + x + colors.length) % colors.length].name
@@ -58,32 +60,36 @@ class App extends Component {
         selected={color.name === this.state.color}
       />)
     }, this);
-    const currentColor = currentProduct.shingle_colors.find(function(e) {return e.name === this.state.color}, this);
+    const currentColor = currentProduct.shingle_colors.find(function (e) { return e.name === this.state.color }, this);
     const displayImageSrc = currentColor.tile_image_url;
 
 
     return (
       <div className="App">
-        {currentProduct.name}
-        <div className="display-image">
-          <button id="prev-color-button" onClick={() => this.handleArrowClick(PrevNextEnum.prev)}>
-            &#9664;
+        <div className="top-section">
+
+          <div className="display-image">
+            <button id="prev-color-button" onClick={() => this.handleArrowClick(PrevNextEnum.prev)}>
+              &#9664;
           </button>
-          <div id="display-image-area"><img src={displayImageSrc} alt={this.state.color}/></div>
-          <button id="next-color-button" onClick={() => this.handleArrowClick(PrevNextEnum.next)}>
-            &#9654;
+            <div id="display-image-area"><img src={displayImageSrc} alt={this.state.color} /></div>
+            <button id="next-color-button" onClick={() => this.handleArrowClick(PrevNextEnum.next)}>
+              &#9654;
           </button>
-        </div>
-        <div className="product-select">
-          <label>
-            Shingle Line:
+          </div>
+          <div className="product-select">
+            <label>
+              Shingle Line:
+            </label>
             <select value={this.state.product} onChange={e => this.handleProdSelect(e)}>
-              {productOptions}
-            </select>
-          </label>
+                {productOptions}
+              </select>
+            <a id="select-label">{currentProduct.name}</a>
+          </div>
+          
         </div>
-        <div className="select-colors">
-          <ul>{colorList}</ul>
+        <div  className="bottom-section">
+          <ul className="select-colors">{colorList}</ul>
         </div>
       </div>
     );
