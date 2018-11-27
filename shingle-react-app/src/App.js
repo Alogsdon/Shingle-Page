@@ -23,8 +23,14 @@ class App extends Component {
   }
 
   handleArrowClick(x) {
-
-    console.log(x);
+    const prod = SHINGLES.find(function (e) { return e.uid === this.state.product }, this);
+    const colors = prod.shingle_colors;
+    const currentColor = colors.find(function (e) { return e.name === this.state.color }, this);
+    const color_index = colors.indexOf(currentColor);
+    this.setState({
+      product: this.state.product,
+      color: colors[(color_index + x + colors.length) % colors.length].name
+    });
   }
 
   handleSelectColor(col) {
@@ -49,7 +55,7 @@ class App extends Component {
         onClick={x => this.handleSelectColor(x)}
         name={color.name}
         image_source={color.deq_tile_image_url}
-        selected={false}
+        selected={color.name === this.state.color}
       />)
     }, this);
     const currentColor = currentProduct.shingle_colors.find(function(e) {return e.name === this.state.color}, this);
