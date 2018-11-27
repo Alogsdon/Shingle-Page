@@ -9,7 +9,7 @@
 .top-section {
   display: grid;
   grid-template-columns: 460px auto;
-  height: 320px;
+  height: 300px;
 
 }
 
@@ -60,20 +60,34 @@
 
 
 .product-select {
-  align-content:1;
+  
 }
 
 .product-select label {
-  align-content: 1;
+  font-size: 23px;
+  position: relative;
+  top: 10%;
 }
 
 .product-select select {
+  position: relative;
+  top: 10%;
+  font-size: 17px;
   width: 90%;
 }
 
 #select-label {
+  position: relative;
+  top: 30%;
+  font-size: 23px;
   grid-column: 2;
   grid-row: 1;
+}
+
+#colors-label {
+  position: relative;
+  left:40px;
+  font-size: 20px;
 }
 
 
