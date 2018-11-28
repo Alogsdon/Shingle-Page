@@ -20,13 +20,14 @@ class App extends Component {
     fetch(dataUrl)
       .then(response => response.json())
       .then(
-      responseData =>
+      responseData => {
         this.setState({
           isLoading: false,
           product: responseData[0].uid,
           color: responseData[0].shingle_colors[0].uid,
           data: responseData,
-        })
+        });
+      }
       )
   }
 
@@ -118,9 +119,9 @@ class SelectableColor extends React.Component {
   render() {
     return (<div className="select-color" style={this.props.selected ? { "backgroundColor": "lightgray" } : {}}>
       <button onClick={() => this.props.onClick(this.props.uid)}
-        style={{"backgroundImage": "url('" + this.props.image_source + "')" }}>
+        style={{ "backgroundImage": "url('" + this.props.image_source + "')" }}>
       </button>
-      <br/>
+      <br />
       <label>{this.props.name}</label>
     </div>
     );

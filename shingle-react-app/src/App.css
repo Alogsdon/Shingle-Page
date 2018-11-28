@@ -1,33 +1,28 @@
-
-
 .App {
-  background-color:rgb(229,227,225);
+  background-color: rgb(229, 227, 225);
+  height: 100%;
 }
-
-
 
 .top-section {
   display: grid;
   grid-template-columns: 460px auto;
   height: 300px;
-
 }
 
-
 .display-image {
-  top:20px;
+  top: 20px;
   grid-column: 1;
   display: grid;
   grid-template-columns: auto 350px auto;
 }
 
-.display-image button{
+.display-image button {
   position: relative;
   top: 140px;
-  height:40px;
+  height: 40px;
   width: 25px;
-  background-color: rgb(115,114,113);
-  color:rgb(255,255,255);
+  background-color: rgb(115, 114, 113);
+  color: rgb(255, 255, 255);
 }
 
 #prev-color-button {
@@ -42,40 +37,36 @@
   grid-column: 3;
 }
 
-
-
 #display-image-area {
   position: relative;
-  top:30px;
+  top: 30px;
   grid-column: 2;
-  height:250px;
-  width:350px;
+  height: 250px;
+  width: 350px;
   overflow: hidden;
 }
-#display-image-area img{
-  height:400%;
-  width:400%;
+
+#display-image-area img {
+  height: 400%;
+  width: 400%;
 }
-
-
-
 
 .product-select label {
   font-size: 23px;
   position: relative;
-  top: 10%;
+  top: 28px;
 }
 
 .product-select select {
   position: relative;
-  top: 10%;
+  top: 32px;
   font-size: 17px;
   width: 90%;
 }
 
 #select-label {
   position: relative;
-  top: 30%;
+  top: 40%;
   font-size: 23px;
   grid-column: 2;
   grid-row: 1;
@@ -83,29 +74,27 @@
 
 #colors-label {
   position: relative;
-  left:40px;
+  left: 40px;
   font-size: 23px;
 }
 
-
-
 .select-colors {
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 }
 
 .select-color {
-  height:70px;
-  padding:5px;
-  width:90px;
+  height: 70px;
+  padding: 5px;
+  width: 90px;
   text-align: center;
 }
+
 .select-color button {
-  height:50px;
-  width:90px;
-}
-.select-color label{
-
-  font-size:12px;
+  height: 50px;
+  width: 90px;
 }
 
+.select-color label {
+  font-size: 12px;
+}
