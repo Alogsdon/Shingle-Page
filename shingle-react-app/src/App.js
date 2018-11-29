@@ -4,14 +4,11 @@ import './App.css';
 const PrevNextEnum = Object.freeze({ "prev": -1, "next": 1 })
 const dataUrl = 'https://mdms.owenscorning.com/api/v1/product/shingles?zip=43659';
 
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: true,
-      product: null,
-      color: null,
       data: null,
     };
   }
@@ -23,109 +20,121 @@ class App extends Component {
       responseData => {
         this.setState({
           isLoading: false,
-          product: responseData[0].uid,
-          color: responseData[0].shingle_colors[0].uid,
           data: responseData,
         });
       }
       )
   }
 
+  render() {
+    return (<div className="App">{this.state.isLoading ?
+      (<h1>Loading</h1>) :
+      (<ShinglePage data={this.state.data} />)}
+    </div>);
+  }
+}
+
+class ShinglePage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      product: props.data[0],
+      color: props.data[0].shingle_colors[0],
+    };
+  }
+
   handleProdSelect(event) {
-    let newProduct = this.state.data.find(function (e) { return e.uid === event.target.value });
+    let newProduct = this.props.data.find(e => e.uid === event.target.value);
 
     this.setState({
-      product: event.target.value,
-      color: newProduct.shingle_colors[0].uid,
+      product: newProduct,
+      color: newProduct.shingle_colors[0],
     });
   }
 
   handleArrowClick(x) {
-    let prod = this.state.data.find(function (e) { return e.uid === this.state.product }, this);
-    let colors = prod.shingle_colors;
-    let currentColor = colors.find(function (e) { return e.uid === this.state.color }, this);
-    let color_index = colors.indexOf(currentColor);
+    let colors = this.state.product.shingle_colors;
+    let color_index = colors.indexOf(this.state.color);
 
     this.setState({
-      color: colors[(color_index + x + colors.length) % colors.length].uid
+      color: colors[(color_index + x + colors.length) % colors.length]
     });
   }
 
   handleSelectColor(col) {
+    let colorObject = this.state.product.shingle_colors.find(e => e.uid === col);
+
     this.setState({
-      color: col,
+      color: colorObject,
     });
   }
 
-  render() {
-    if (!this.state.isLoading) {
-      const currentProduct = this.state.data.find(function (e) { return e.uid === this.state.product }, this);
-      const currentColor = currentProduct.shingle_colors.find(function (e) { return e.uid === this.state.color }, this);
-      const displayImageSrc = currentColor.tile_image_url;
+  renderProductSelectOptions() {
+    return (
+      this.props.data.map(prod => (
+        <option value={prod.uid} key={prod.uid}>
+          {prod.name}
+        </option>)
+      )
+    );
+  }
 
-      const productOptions = this.state.data.map(function (prod) {
-        return (
-          <option value={prod.uid} key={prod.uid}>
-            {prod.name}
-          </option>
-        );
-      });
-
-      const colorList = currentProduct.shingle_colors.map(function (color) {
-        return (<SelectableColor
+  renderColorList() {
+    return (
+      this.state.product.shingle_colors.map(color => (
+        <SelectableColor
           key={color.uid}
           onClick={x => this.handleSelectColor(x)}
           name={color.name}
           uid={color.uid}
           image_source={color.deq_tile_image_url}
-          selected={color.uid === this.state.color}
+          selected={color.uid === this.state.color.uid}
         />)
-      }, this);
+      )
+    );
+  }
 
-      return (
-        <div className="App">
-          <div className="top-section">
-            <div className="display-image">
-              <button id="prev-color-button" onClick={() => this.handleArrowClick(PrevNextEnum.prev)}>
-                &#9664;
+  render() {
+    return (
+      <div className="ShinglePage">
+        <div className="top-section">
+          <div className="display-image">
+            <button id="prev-color-button" onClick={() => this.handleArrowClick(PrevNextEnum.prev)}>
+              &#9664;
               </button>
-              <div id="display-image-area"><img src={displayImageSrc} alt={this.state.color} /></div>
-              <button id="next-color-button" onClick={() => this.handleArrowClick(PrevNextEnum.next)}>
-                &#9654;
+            <div id="display-image-area"><img src={this.state.color.tile_image_url} alt={this.state.color} /></div>
+            <button id="next-color-button" onClick={() => this.handleArrowClick(PrevNextEnum.next)}>
+              &#9654;
               </button>
-            </div>
-            <div className="product-select">
-              <label>Shingle Line:</label>
-              <select value={this.state.product} onChange={e => this.handleProdSelect(e)}>
-                {productOptions}
-              </select>
-              <p id="select-label">{currentProduct.name} - {currentColor.name}</p>
-            </div>
           </div>
-          <div className="bottom-section">
-            <p id="colors-label">Shingle Colors</p>
-            <ul className="select-colors">{colorList}</ul>
+          <div className="product-select">
+            <label>Shingle Line:</label>
+            <select value={this.state.product.uid} onChange={e => this.handleProdSelect(e)}>
+              {this.renderProductSelectOptions()}
+            </select>
+            <p id="select-label">{this.state.product.name} - {this.state.color.name}</p>
           </div>
         </div>
-      );
-    }
-    else {
-      return (<div className="App">Loading</div>);
-    }
+        <div className="bottom-section">
+          <p id="colors-label">Shingle Colors</p>
+          <ul className="select-colors">{this.renderColorList()}</ul>
+        </div>
+      </div>
+    );
   }
 }
 
-class SelectableColor extends React.Component {
-  render() {
-    return (<div className="select-color" style={this.props.selected ? { "backgroundColor": "lightgray" } : {}}>
-      <button onClick={() => this.props.onClick(this.props.uid)}
-        style={{ "backgroundImage": "url('" + this.props.image_source + "')" }}>
+function SelectableColor(props) {
+  return (
+    (<div className={props.selected ? "select-color color-is-selected" : "select-color"}>
+      <button onClick={() => props.onClick(props.uid)}
+        style={{ "backgroundImage": "url('" + props.image_source + "')" }}>
       </button>
       <br />
-      <label>{this.props.name}</label>
+      <label>{props.name}</label>
     </div>
-    );
-  }
+    )
+  );
 }
 
 export default App;

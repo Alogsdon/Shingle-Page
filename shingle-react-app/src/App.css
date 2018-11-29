@@ -89,7 +89,9 @@
   width: 90px;
   text-align: center;
 }
-
+.color-is-selected {
+  background-color: lightgray;
+}
 .select-color button {
   height: 50px;
   width: 90px;
@@ -98,3 +100,4 @@
 .select-color label {
   font-size: 12px;
 }
+
